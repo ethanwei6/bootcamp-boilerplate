@@ -30,15 +30,17 @@ function ExampleDashboard() {
     if (Array.isArray(value)) setAgeRange(value);
   }
 
-  const filteredPets = petList.filter((pet: any) => {
-    const q = (search || "").trim().toLowerCase();
-    const nameMatches = (pet.name ?? "").toString().toLowerCase().includes(q);
-    const age = pet.age ?? 0;
-    const inAgeRange = age >= ageRange[0] && age <= ageRange[1];
+const filteredPets = petList.filter(pet => {
+  const q = (search || "").trim().toLowerCase();
 
-    if (!q) return inAgeRange;
-    return nameMatches && inAgeRange;
-  });
+  const name = pet.name ? String(pet.name).toLowerCase() : "";
+  const age = (pet.age !== undefined && pet.age !== null) ? pet.age : 0;
+
+  const inAgeRange = age >= ageRange[0] && age <= ageRange[1];
+
+  if (!q) return inAgeRange;
+  return name.includes(q) && inAgeRange;
+});
 
 
   console.log(filteredPets);
