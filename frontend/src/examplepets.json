@@ -9,7 +9,7 @@
         "description": "very good dog who likes to chew on bones",
         "location": "San Francisco, CA",
         "personality": ["sigma", "happy"],
-        "characteristics": ["Good with kids", "House Traineed"],
+        "characteristics": ["Good w/ kids", "Trained"],
         "url":"https://imageserver.petsbest.com/marketing/blog/toy-poodle.jpg"
     },
     {
@@ -22,7 +22,7 @@
         "description": "very bad dog who likes to chew on slippers",
         "location": "San Francisco, CA",
         "personality": ["beta", "sad"],
-        "characteristics": ["Bad with kids", "Not Potty Trained"],
+        "characteristics": ["Bad w/ kids", "Not trained"],
         "url":"https://www.borrowmydoggy.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2F4ij0poqn%2Fproduction%2Fda89d930fc320dd912a2a25487b9ca86b37fcdd6-800x600.jpg&w=1080&q=80"
     },
     {
