@@ -11,22 +11,40 @@ import {useState } from 'react'
 import Slider from '@mui/material/Slider';
 
 function ExampleDashboard() {
+  const petList = pets as any[];
+
   const [search, setSearch] = useState("");
+
+
+  const ages = petList.map(p => (p.age ?? 0));
+  const minAge = ages.length ? Math.min(...ages) : 0;
+  const maxAge = ages.length ? Math.max(...ages) : 15;
+  const [ageRange, setAgeRange] = useState<number[]>([minAge, maxAge]);
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   }
 
 
-  const filteredPets = pets.filter((pet: any) => {
-    return pet.name.toLowerCase().includes(search.toLowerCase());
+  const onAgeChange = (_: Event | React.SyntheticEvent, value: number | number[]) => {
+    if (Array.isArray(value)) setAgeRange(value);
+  }
+
+  const filteredPets = petList.filter((pet: any) => {
+    const q = (search || "").trim().toLowerCase();
+    const nameMatches = (pet.name ?? "").toString().toLowerCase().includes(q);
+    const age = pet.age ?? 0;
+    const inAgeRange = age >= ageRange[0] && age <= ageRange[1];
+
+    if (!q) return inAgeRange;
+    return nameMatches && inAgeRange;
   });
 
 
   console.log(filteredPets);
 
 
-  const petCards = pets.map((pet: any) => { //for local json file: change "data" to "pets" and uncomment the json import line 
+  const petCards = filteredPets.map((pet: any) => { //for local json file: change "data" to "pets" and uncomment the json import line 
     return (
       
       <div key={pet._id} className="pet-grid-item">
@@ -84,6 +102,7 @@ function ExampleDashboard() {
   
 
 
+    
   return (
     <>
       <div>
@@ -92,21 +111,28 @@ function ExampleDashboard() {
         <h3 style={{textAlign: 'center', marginTop: '0px'}}>Discover loving pets looking for their forever homes. Each pet has been carefully assessed and is ready to bring joy to your family!</h3>
       </div>
 
-      <div className='search-bar'>
+      <div className='search-bar' style={{ maxWidth: 900, margin: '12px auto' }}>
         <TextField
           id="search-bar"
           variant="outlined"
           placeholder="Search for pets by name"
           size="small"
           fullWidth
-          onChange = {onSearchChange}
+          value={search}
+          onChange={onSearchChange}
         />
       </div>
       
-      <div className='age-slider'>
+      <div className='age-slider' style={{ maxWidth: 900, margin: '8px auto', padding: '0 8px' }}>
+        <div style={{ fontSize: 12, marginBottom: 6 }}>Filter by age (years)</div>
         <Slider
           id="age-slider"
           size="small"
+          value={ageRange}
+          onChange={onAgeChange}
+          min={minAge}
+          max={maxAge}
+          valueLabelDisplay="auto"
         />
       </div>
       
