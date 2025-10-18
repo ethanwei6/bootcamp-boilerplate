@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import {useState } from 'react'
 import Slider from '@mui/material/Slider';
 
@@ -78,7 +79,7 @@ const filteredPets = petList.filter(pet => {
           </CardContent>
 
           <CardContent>
-            <Box sx={{height: 300, display: 'flex', 
+            <Box sx={{ display: 'flex', 
                 justifyContent: 'flex-start', flexDirection: 'column', }}>
              <Typography gutterBottom variant="body1" sx = {{margin: 1}}>Description</Typography> 
             <Typography gutterBottom variant="body2" sx = {{textAlign: 'center', fontSize: '15px', margin: 1}}>
@@ -86,14 +87,34 @@ const filteredPets = petList.filter(pet => {
             </Typography>
             
             <Typography gutterBottom variant="body1" sx = {{margin: 1}}>Personality</Typography> 
-            <Typography gutterBottom variant="body2" sx = {{textAlign: 'center', fontSize: '15px', margin: 1, justifyContent: "space-between"}}>
-              {pet.personality.map((x:string, i:number) => <span key = {i} style = {{border: 1, borderRadius: 7, backgroundColor: '#efeff1ff'}}>{x}</span>)} 
+            <Typography gutterBottom variant="body2" sx = {{display: 'flex', textAlign: 'center', fontSize: '15px', margin: 1, justifyContent: "space-evenly", flexWrap: "wrap"}}>
+              {pet.personality.map((x:string, i:number) => <span key = {i} style = {{border: 1, borderRadius: 7, backgroundColor: '#f8f8f8ff', padding: 4}}>{x}</span>)} 
             </Typography>
 
             <Typography gutterBottom variant="body1" sx = {{margin: 1}}>Characteristics</Typography> 
-            <Typography gutterBottom variant="body2" sx = {{textAlign: 'center', fontSize: '15px', margin: 1, justifyContent: "space-between"}}>
-              {pet.characteristics.map((x:string, i:number) => <span key = {i} style = {{border: 1, borderRadius: 7, backgroundColor: '#efeff1ff'}}>{x}</span>)} 
+            <Typography gutterBottom variant="body2" sx = {{display: 'flex', textAlign: 'center', fontSize: '15px', margin: 1, justifyContent: "space-evenly", flexWrap: "wrap"}}>
+              {pet.characteristics.map((x:string, i:number) => <span key = {i} style = {{border: 1, borderRadius: 7, backgroundColor: '#efeff1ff', padding: 4}}>{x}</span>)} 
             </Typography>
+            </Box>
+          </CardContent>
+
+
+          <CardContent>
+            <Box sx={{ display: 'flex', 
+                justifyContent: 'flex-start', flexDirection: 'row', alignItems: 'center'}}>
+            <Box sx={{ display: 'flex', 
+                justifyContent: 'flex-start', flexDirection: 'row', alignItems: 'center'}}>
+            <Typography gutterBottom variant="body2" sx = {{textAlign: 'center', fontSize: '15px'}}>
+              {pet.price} 
+            </Typography>
+
+            <Typography gutterBottom variant="body1" sx = {{margin: 1}}>Adoption Fee</Typography>
+            </Box>
+
+            <Button variant="text" color="primary" size="small" sx = {{border: 1, borderRaidus: 5, backgroundColor: '#000000ff', color: '#ffffffff'}}>
+            Learn More
+            </Button>
+            
             </Box>
           </CardContent>
         </Card>
