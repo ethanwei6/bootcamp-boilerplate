@@ -9,7 +9,7 @@
         "description": "very good dog who likes to chew on bones",
         "location": "San Francisco, CA",
         "personality": ["sigma", "happy"],
-        "characteristics": ["Good with kids", "House Traineed"],
+        "characteristics": ["Good w/ kids", "Trained"],
         "url":"https://imageserver.petsbest.com/marketing/blog/toy-poodle.jpg"
     },
     {
@@ -22,7 +22,20 @@
         "description": "very bad dog who likes to chew on slippers",
         "location": "San Francisco, CA",
         "personality": ["beta", "sad"],
-        "characteristics": ["Bad with kids", "Not Potty Trained"],
+        "characteristics": ["Bad w/ kids", "Not trained"],
         "url":"https://www.borrowmydoggy.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2F4ij0poqn%2Fproduction%2Fda89d930fc320dd912a2a25487b9ca86b37fcdd6-800x600.jpg&w=1080&q=80"
+    },
+    {
+        "_id":{"$oid":"69c638a7cb631a6fab048ceb"},
+        "name":"Dhruv Gupta",
+        "age":"67",
+        "gender": "Unknown",
+        "breed":"Unknown",
+        "price": 1,
+        "description": "very bad dog who likes to chew on slippers",
+        "location": "San Francisco, CA",
+        "personality": ["beta", "sad"],
+        "characteristics": ["Bad with kids", "Not Potty Trained"],
+        "url":"https://media.licdn.com/dms/image/v2/D5603AQFZz25DIOZMNQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1713297372566?e=1762387200&v=beta&t=pNNu0dMJNOoUlVbWGQOTsEMuzwMWHJ7M9NJR0s73L74"
     }
 ]
