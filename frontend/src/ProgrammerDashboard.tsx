@@ -12,9 +12,11 @@ import {useState } from 'react'
 import Slider from '@mui/material/Slider';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 function ExampleDashboard() {
   const petList = pets as any[];
+  const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
 
@@ -113,8 +115,26 @@ const filteredPets = petList.filter(pet => {
             <Typography gutterBottom variant="body1" sx = {{margin: 1}}>Adoption Fee</Typography>
             </Box>
 
-            <Button variant="text" color="primary" size="small" sx = {{border: 1, borderRaidus: 5, backgroundColor: '#000000ff', color: '#ffffffff'}}>
-            Learn More
+            <Button 
+              variant="contained" 
+              size="small" 
+              onClick={() => navigate(`/apply/${pet._id}`)}
+              sx={{
+                background: 'linear-gradient(45deg, #FF6B6B, #FF8E8E)',
+                color: 'white',
+                borderRadius: '15px',
+                px: 3,
+                py: 1,
+                fontWeight: 'bold',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #FF5252, #FF7979)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px rgba(255, 107, 107, 0.4)'
+                },
+                transition: 'all 0.3s ease'
+              }}
+            >
+              🐾 Apply to Adopt
             </Button>
             
             </Box>

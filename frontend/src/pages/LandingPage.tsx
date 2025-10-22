@@ -250,7 +250,7 @@ const LandingPage: React.FC = () => {
           animation: 'pulse 2s ease-in-out infinite 1s'
         }} />
 
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="h3" component="h2" textAlign="center" gutterBottom sx={{ 
             mb: 6,
             fontSize: { xs: '2rem', md: '3rem' },
@@ -262,9 +262,9 @@ const LandingPage: React.FC = () => {
           }}>
             Why Choose PawGrammers? ✨
           </Typography>
-        <Grid container spacing={4}>
+        <Grid container spacing={4} justifyContent="center" alignItems="stretch" sx={{ width: '100%' }}>
           {features.map((feature, index) => (
-            <Grid item xs={12} md={4} key={index}>
+            <Grid item xs={12} sm={6} md={4} key={index} sx={{ display: 'flex', justifyContent: 'center' }}>
               <Card sx={{ 
                 height: '100%', 
                 textAlign: 'center', 
@@ -353,7 +353,7 @@ const LandingPage: React.FC = () => {
           animation: 'pulse 3s ease-in-out infinite 1.5s'
         }} />
 
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="h3" component="h2" textAlign="center" gutterBottom sx={{ 
             mb: 6,
             color: 'white',
@@ -362,9 +362,9 @@ const LandingPage: React.FC = () => {
           }}>
             Our Amazing Impact! 🎉
           </Typography>
-          <Grid container spacing={4} textAlign="center">
+          <Grid container spacing={4} textAlign="center" justifyContent="center" alignItems="stretch" sx={{ width: '100%' }}>
             {stats.map((stat, index) => (
-              <Grid item xs={12} md={4} key={index}>
+              <Grid item xs={12} sm={6} md={4} key={index} sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Box sx={{
                   background: 'rgba(255, 255, 255, 0.1)',
                   borderRadius: '20px',
@@ -406,7 +406,7 @@ const LandingPage: React.FC = () => {
         py: 8,
         position: 'relative'
       }}>
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography variant="h3" component="h2" textAlign="center" gutterBottom sx={{ 
             mb: 6,
             fontSize: { xs: '2rem', md: '3rem' },
@@ -418,8 +418,8 @@ const LandingPage: React.FC = () => {
           }}>
             How It Works 🚀
           </Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
+        <Grid container spacing={4} justifyContent="center" alignItems="stretch" sx={{ width: '100%' }}>
+          <Grid item xs={12} sm={6} md={4} sx={{ display: 'flex', justifyContent: 'center' }}>
             <Box textAlign="center">
               <Box sx={{ 
                 width: 100, 
@@ -446,7 +446,7 @@ const LandingPage: React.FC = () => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} sm={6} md={4} sx={{ display: 'flex', justifyContent: 'center' }}>
             <Box textAlign="center">
               <Box sx={{ 
                 width: 100, 
@@ -473,7 +473,7 @@ const LandingPage: React.FC = () => {
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} sm={6} md={4} sx={{ display: 'flex', justifyContent: 'center' }}>
             <Box textAlign="center">
               <Box sx={{ 
                 width: 100, 

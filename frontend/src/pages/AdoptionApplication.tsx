@@ -18,7 +18,10 @@ import {
   CircularProgress,
   Stepper,
   Step,
-  StepLabel
+  StepLabel,
+  Paper,
+  Chip,
+  Avatar
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -73,6 +76,7 @@ const AdoptionApplication: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
   
   const { petId } = useParams();
   const { user } = useAuth();
@@ -115,20 +119,54 @@ const AdoptionApplication: React.FC = () => {
   ) => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     setFormData(prev => ({ ...prev, [field]: value }));
+    
+    // Clear error when user starts typing
+    if (formErrors[field]) {
+      setFormErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const errors: {[key: string]: string} = {};
+    
+    if (!formData.name.trim()) errors.name = 'Name is required';
+    if (!formData.email.trim()) errors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) errors.email = 'Email is invalid';
+    if (!formData.phoneNumber.trim()) errors.phoneNumber = 'Phone number is required';
+    if (!formData.address.trim()) errors.address = 'Address is required';
+    if (!formData.housingType) errors.housingType = 'Housing type is required';
+    if (formData.yearlyIncome <= 0) errors.yearlyIncome = 'Please enter a valid income';
+    if (!formData.vetName.trim()) errors.vetName = 'Veterinarian name is required';
+    if (!formData.vetLocation.trim()) errors.vetLocation = 'Veterinarian location is required';
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async () => {
+    if (!validateForm()) {
+      setError('Please fill in all required fields correctly.');
+      return;
+    }
+
     setIsLoading(true);
     setError('');
 
     try {
       // TODO: Replace with actual API call
+      console.log('Submitting application:', {
+        petId: pet?._id,
+        petName: pet?.name,
+        applicant: formData,
+        submittedAt: new Date().toISOString()
+      });
+      
       await new Promise(resolve => setTimeout(resolve, 2000)); // Mock API call
       
       setSuccess(true);
       setTimeout(() => {
         navigate('/dashboard');
-      }, 2000);
+      }, 3000);
     } catch (err) {
       setError('Failed to submit application. Please try again.');
     } finally {
@@ -141,35 +179,122 @@ const AdoptionApplication: React.FC = () => {
       case 0:
         return (
           <Box>
-            <Typography variant="h6" gutterBottom>
-              Pet Information
+            <Typography variant="h5" gutterBottom sx={{ 
+              fontWeight: 'bold',
+              background: 'linear-gradient(45deg, #4CAF50, #2196F3)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              mb: 3
+            }}>
+              🐾 Pet Information
             </Typography>
             {pet && (
-              <Card sx={{ mb: 3 }}>
-                <Box sx={{ display: 'flex', p: 2 }}>
-                  {pet.url && (
-                    <Box sx={{ width: 150, height: 150, mr: 2 }}>
-                      <img 
-                        src={pet.url} 
-                        alt={pet.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
-                      />
-                    </Box>
+              <Card sx={{ 
+                mb: 3, 
+                borderRadius: '20px',
+                background: 'linear-gradient(145deg, #ffffff, #f8f9fa)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+                border: '3px solid transparent',
+                backgroundClip: 'padding-box'
+              }}>
+                <Box sx={{ display: 'flex', p: 3 }}>
+                  {pet.url ? (
+                    <Avatar 
+                      src={pet.url}
+                      alt={pet.name}
+                      sx={{ 
+                        width: 150, 
+                        height: 150, 
+                        mr: 3,
+                        borderRadius: '20px'
+                      }}
+                    />
+                  ) : (
+                    <Avatar 
+                      sx={{ 
+                        width: 150, 
+                        height: 150, 
+                        mr: 3,
+                        borderRadius: '20px',
+                        background: 'linear-gradient(45deg, #4CAF50, #2196F3)',
+                        fontSize: '3rem'
+                      }}
+                    >
+                      🐾
+                    </Avatar>
                   )}
                   <Box sx={{ flex: 1 }}>
-                    <Typography variant="h6">{pet.name}</Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+                      {pet.name}
+                    </Typography>
+                    <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
                       {pet.breed} • {pet.age} years old • {pet.gender}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                      📍 {pet.location}
-                    </Typography>
-                    <Typography variant="body2" sx={{ mt: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
+                        📍
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {pet.location}
+                      </Typography>
+                    </Box>
+                    <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
                       {pet.description}
                     </Typography>
-                    <Typography variant="h6" color="primary" sx={{ mt: 1 }}>
-                      Adoption Fee: ${pet.price}
-                    </Typography>
+                    
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+                        Personality Traits:
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                        {pet.personality.map((trait, index) => (
+                          <Chip 
+                            key={index} 
+                            label={trait} 
+                            size="small" 
+                            sx={{ 
+                              background: 'linear-gradient(45deg, #FF6B6B, #FF8E8E)',
+                              color: 'white',
+                              fontWeight: 'bold'
+                            }}
+                          />
+                        ))}
+                      </Box>
+                    </Box>
+                    
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
+                        Characteristics:
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                        {pet.characteristics.map((char, index) => (
+                          <Chip 
+                            key={index} 
+                            label={char} 
+                            size="small" 
+                            variant="outlined"
+                            sx={{ 
+                              borderColor: '#4CAF50',
+                              color: '#4CAF50',
+                              fontWeight: 'bold'
+                            }}
+                          />
+                        ))}
+                      </Box>
+                    </Box>
+                    
+                    <Paper sx={{ 
+                      p: 2, 
+                      background: 'linear-gradient(45deg, #4CAF50, #2196F3)',
+                      color: 'white',
+                      borderRadius: '15px',
+                      textAlign: 'center'
+                    }}>
+                      <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                        Adoption Fee: ${pet.price}
+                      </Typography>
+                    </Paper>
                   </Box>
                 </Box>
               </Card>
@@ -180,8 +305,15 @@ const AdoptionApplication: React.FC = () => {
       case 1:
         return (
           <Box>
-            <Typography variant="h6" gutterBottom>
-              Personal Information
+            <Typography variant="h5" gutterBottom sx={{ 
+              fontWeight: 'bold',
+              background: 'linear-gradient(45deg, #4CAF50, #2196F3)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              mb: 3
+            }}>
+              👤 Personal Information
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
@@ -190,7 +322,14 @@ const AdoptionApplication: React.FC = () => {
                   label="Full Name"
                   value={formData.name}
                   onChange={handleInputChange('name')}
+                  error={!!formErrors.name}
+                  helperText={formErrors.name}
                   required
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '15px',
+                    }
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -200,7 +339,14 @@ const AdoptionApplication: React.FC = () => {
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange('email')}
+                  error={!!formErrors.email}
+                  helperText={formErrors.email}
                   required
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '15px',
+                    }
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -229,8 +375,15 @@ const AdoptionApplication: React.FC = () => {
       case 2:
         return (
           <Box>
-            <Typography variant="h6" gutterBottom>
-              Living Situation
+            <Typography variant="h5" gutterBottom sx={{ 
+              fontWeight: 'bold',
+              background: 'linear-gradient(45deg, #4CAF50, #2196F3)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              mb: 3
+            }}>
+              🏠 Living Situation
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12}>
@@ -291,8 +444,15 @@ const AdoptionApplication: React.FC = () => {
       case 3:
         return (
           <Box>
-            <Typography variant="h6" gutterBottom>
-              Veterinary Information
+            <Typography variant="h5" gutterBottom sx={{ 
+              fontWeight: 'bold',
+              background: 'linear-gradient(45deg, #4CAF50, #2196F3)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              mb: 3
+            }}>
+              🏥 Veterinary Information
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
@@ -320,8 +480,15 @@ const AdoptionApplication: React.FC = () => {
       case 4:
         return (
           <Box>
-            <Typography variant="h6" gutterBottom>
-              Review Your Application
+            <Typography variant="h5" gutterBottom sx={{ 
+              fontWeight: 'bold',
+              background: 'linear-gradient(45deg, #4CAF50, #2196F3)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              mb: 3
+            }}>
+              📋 Review Your Application
             </Typography>
             <Card sx={{ p: 3, mb: 3 }}>
               <Typography variant="subtitle1" gutterBottom>
@@ -397,14 +564,29 @@ const AdoptionApplication: React.FC = () => {
           </Button>
         </Box>
 
-        <Typography variant="h4" component="h1" gutterBottom>
-          Adoption Application
+        <Typography variant="h4" component="h1" gutterBottom sx={{
+          fontWeight: 'bold',
+          background: 'linear-gradient(45deg, #4CAF50, #2196F3)',
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          textAlign: 'center',
+          mb: 4
+        }}>
+          🐾 Pet Adoption Application
         </Typography>
 
         <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
           {steps.map((label) => (
             <Step key={label}>
-              <StepLabel>{label}</StepLabel>
+              <StepLabel sx={{
+                '& .MuiStepLabel-label': {
+                  fontSize: '0.9rem',
+                  fontWeight: 'bold'
+                }
+              }}>
+                {label}
+              </StepLabel>
             </Step>
           ))}
         </Stepper>
@@ -415,7 +597,15 @@ const AdoptionApplication: React.FC = () => {
           </Alert>
         )}
 
-        <Card sx={{ p: 3, mb: 3 }}>
+        <Card sx={{ 
+          p: 4, 
+          mb: 3,
+          borderRadius: '20px',
+          background: 'linear-gradient(145deg, #ffffff, #f8f9fa)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+          border: '3px solid transparent',
+          backgroundClip: 'padding-box'
+        }}>
           {renderStepContent(activeStep)}
         </Card>
 
@@ -423,8 +613,15 @@ const AdoptionApplication: React.FC = () => {
           <Button
             disabled={activeStep === 0}
             onClick={handleBack}
+            sx={{
+              borderRadius: '25px',
+              px: 4,
+              py: 1.5,
+              fontSize: '1rem',
+              fontWeight: 'bold'
+            }}
           >
-            Back
+            ← Back
           </Button>
           
           {activeStep === steps.length - 1 ? (
@@ -432,15 +629,43 @@ const AdoptionApplication: React.FC = () => {
               variant="contained"
               onClick={handleSubmit}
               disabled={isLoading}
+              sx={{
+                background: 'linear-gradient(45deg, #4CAF50, #2196F3)',
+                borderRadius: '25px',
+                px: 4,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #388E3C, #1976D2)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px rgba(76, 175, 80, 0.4)'
+                },
+                transition: 'all 0.3s ease'
+              }}
             >
-              {isLoading ? <CircularProgress size={24} /> : 'Submit Application'}
+              {isLoading ? <CircularProgress size={24} /> : '🚀 Submit Application'}
             </Button>
           ) : (
             <Button
               variant="contained"
               onClick={handleNext}
+              sx={{
+                background: 'linear-gradient(45deg, #4CAF50, #2196F3)',
+                borderRadius: '25px',
+                px: 4,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #388E3C, #1976D2)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px rgba(76, 175, 80, 0.4)'
+                },
+                transition: 'all 0.3s ease'
+              }}
             >
-              Next
+              Next →
             </Button>
           )}
         </Box>
