@@ -11,7 +11,7 @@ import {
   Alert,
   CircularProgress
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -43,7 +43,11 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const LoginPage: React.FC = () => {
-  const [tabValue, setTabValue] = useState(0);
+  const location = useLocation();
+  const [tabValue, setTabValue] = useState(() => {
+    // Check if user came from register button and set to register tab
+    return location.state?.showRegister ? 2 : 0;
+  });
   const [loginForm, setLoginForm] = useState({ userName: '', password: '' });
   const [registerForm, setRegisterForm] = useState({ userName: '', password: '', confirmPassword: '' });
   const [error, setError] = useState('');

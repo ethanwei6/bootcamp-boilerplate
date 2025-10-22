@@ -10,6 +10,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useState } from 'react'
 import Slider from '@mui/material/Slider';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function ExampleDashboard() {
   const petList = pets as any[];
@@ -126,12 +128,79 @@ const filteredPets = petList.filter(pet => {
 
     
   return (
-    <>
-      <div>
-        <h1 style={{textAlign: 'center', marginTop: '0px', fontSize: '60px'}}>Pawgrammers</h1>
-        <h2 style={{textAlign: 'center', marginTop: '0px'}}>Find your perfect companion</h2>
-        <h3 style={{textAlign: 'center', marginTop: '0px'}}>Discover loving pets looking for their forever homes. Each pet has been carefully assessed and is ready to bring joy to your family!</h3>
-      </div>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Header />
+      
+      <Box sx={{ flex: 1 }}>
+        <Box sx={{
+          background: 'linear-gradient(135deg, #4CAF50 0%, #2196F3 100%)',
+          color: 'white',
+          py: 6,
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          {/* Playful Background Shapes */}
+          <Box sx={{
+            position: 'absolute',
+            top: '10%',
+            left: '5%',
+            width: 60,
+            height: 60,
+            borderRadius: '50%',
+            background: 'rgba(255, 255, 255, 0.2)',
+            animation: 'float 3s ease-in-out infinite'
+          }} />
+          
+          <Box sx={{
+            position: 'absolute',
+            top: '20%',
+            right: '10%',
+            width: 80,
+            height: 80,
+            borderRadius: '50%',
+            background: 'rgba(255, 255, 255, 0.15)',
+            animation: 'float 3s ease-in-out infinite 1.5s'
+          }} />
+
+          <Box sx={{
+            position: 'absolute',
+            bottom: '15%',
+            left: '15%',
+            width: 50,
+            height: 50,
+            borderRadius: '50%',
+            background: 'rgba(255, 255, 255, 0.2)',
+            animation: 'float 3s ease-in-out infinite 2s'
+          }} />
+
+          <Container maxWidth="lg">
+            <Typography variant="h2" component="h1" sx={{ 
+              fontSize: { xs: '2.5rem', md: '4rem' },
+              fontWeight: 'bold',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+              mb: 2
+            }}>
+              🐾 PawGrammers 🐾
+            </Typography>
+            <Typography variant="h4" sx={{ 
+              mb: 2,
+              opacity: 0.9,
+              fontSize: { xs: '1.3rem', md: '1.8rem' }
+            }}>
+              Find your perfect companion
+            </Typography>
+            <Typography variant="h6" sx={{ 
+              mb: 4,
+              opacity: 0.8,
+              fontSize: { xs: '1rem', md: '1.2rem' },
+              maxWidth: '800px',
+              mx: 'auto'
+            }}>
+              Discover loving pets looking for their forever homes. Each pet has been carefully assessed and is ready to bring joy to your family! ✨
+            </Typography>
+          </Container>
+        </Box>
 
       <div className='search-bar' style={{ maxWidth: 900, margin: '12px auto' }}>
         <TextField
@@ -159,14 +228,17 @@ const filteredPets = petList.filter(pet => {
       </div>
       
       
-      <Container maxWidth="lg">
-        <Box className="dashboard" sx={{py: 4}}>
-          <div className="pet-grid">
-            {petCards}
-          </div>
-        </Box>
-      </Container>
-    </>
+        <Container maxWidth="lg">
+          <Box className="dashboard" sx={{py: 4}}>
+            <div className="pet-grid">
+              {petCards}
+            </div>
+          </Box>
+        </Container>
+      </Box>
+      
+      <Footer />
+    </Box>
   )
 }
 

@@ -8,9 +8,12 @@ const Footer: React.FC = () => {
       backgroundColor: '#333', 
       color: 'white', 
       py: 4,
-      mt: 'auto'
+      mt: 'auto',
+      width: '100vw',
+      marginLeft: 'calc(-50vw + 50%)',
+      marginRight: 'calc(-50vw + 50%)'
     }}>
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" sx={{ width: '100%' }}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -19,14 +22,14 @@ const Footer: React.FC = () => {
                 PawGrammers
               </Typography>
             </Box>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+            <Typography variant="body2" sx={{ opacity: 0.8, color: 'white' }}>
               Connecting loving families with pets in need of forever homes. 
               Every adoption creates a new beginning.
             </Typography>
           </Grid>
           
           <Grid item xs={12} md={4}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: 'white' }}>
               Quick Links
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -46,23 +49,23 @@ const Footer: React.FC = () => {
           </Grid>
           
           <Grid item xs={12} md={4}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: 'white' }}>
               Contact Info
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+            <Typography variant="body2" sx={{ opacity: 0.8, color: 'white' }}>
               📧 info@pawgrammers.com
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+            <Typography variant="body2" sx={{ opacity: 0.8, color: 'white' }}>
               📞 (555) 123-PAWS
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+            <Typography variant="body2" sx={{ opacity: 0.8, color: 'white' }}>
               📍 San Francisco, CA
             </Typography>
           </Grid>
         </Grid>
         
         <Box sx={{ borderTop: '1px solid #555', mt: 4, pt: 2, textAlign: 'center' }}>
-          <Typography variant="body2" sx={{ opacity: 0.6 }}>
+          <Typography variant="body2" sx={{ opacity: 0.6, color: 'white' }}>
             © 2024 PawGrammers. All rights reserved. Made with ❤️ for pets and their families.
           </Typography>
         </Box>
