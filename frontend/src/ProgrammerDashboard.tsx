@@ -124,7 +124,6 @@ const filteredPets = petList.filter(pet => {
   
   
 
-
     
   return (
     <>
