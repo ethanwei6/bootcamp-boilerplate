@@ -18,24 +18,30 @@ let database
 
 export const connectToServer = async () => {
     try {
+      console.log("🔗 Attempting to connect to MongoDB...");
+      console.log("📊 Database name:", process.env.DATABASE_NAME);
+      console.log("🌐 Atlas URI:", process.env.ATLAS_URI ? "✅ Set" : "❌ Missing");
+      
       // Connect the client to the server
       await client.connect();
+      console.log("✅ MongoDB client connected successfully!");
       
       // Verify connection by pinging the database
       await client.db(process.env.DATABASE_NAME).command({ ping: 1 });
       console.log("✅ MongoDB cluster connection established successfully!");
 
-      const { databases } = await client.db().admin().listDatabases();
-      const exists = databases.some(d => d.name === process.env.DATABASE_NAME);
-      if (!exists) {
-        throw new Error(`Database name ${process.env.DATABASE_NAME} not found on server (check your DATABASE_NAME environment variable!).`);
-      }
-
+      // Set the database reference
       database = client.db(process.env.DATABASE_NAME);
       console.log(`✅ Connection to database "${process.env.DATABASE_NAME}" established successfully!`);
+      
+      // Test the database connection by listing collections
+      const collections = await database.listCollections().toArray();
+      console.log(`📋 Available collections:`, collections.map(c => c.name));
+      
       return true; // Return success status
     } catch (err) {
       console.error("❌ MongoDB connection failed:", err);
+      console.error("🔍 Error details:", err.message);
       return false; // Return failure status
     }
 };

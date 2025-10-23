@@ -9,9 +9,10 @@ import {
   Tabs, 
   Tab, 
   Alert,
-  CircularProgress
+  CircularProgress,
+  Link
 } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -43,11 +44,7 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const LoginPage: React.FC = () => {
-  const location = useLocation();
-  const [tabValue, setTabValue] = useState(() => {
-    // Check if user came from register button and set to register tab
-    return location.state?.showRegister ? 2 : 0;
-  });
+  const [tabValue, setTabValue] = useState(0);
   const [loginForm, setLoginForm] = useState({ userName: '', password: '' });
   const [registerForm, setRegisterForm] = useState({ userName: '', password: '', confirmPassword: '' });
   const [error, setError] = useState('');
@@ -56,7 +53,7 @@ const LoginPage: React.FC = () => {
   const { login, register } = useAuth();
   const navigate = useNavigate();
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
     setError('');
   };
@@ -180,6 +177,12 @@ const LoginPage: React.FC = () => {
             </form>
             <Typography variant="body2" textAlign="center" sx={{ mt: 2 }}>
               Demo credentials: username: "user", password: "user123"
+            </Typography>
+            <Typography variant="body2" textAlign="center" sx={{ mt: 2 }}>
+              Don't have an account?{' '}
+              <Link component="button" variant="body2" onClick={() => navigate('/register')} sx={{ textDecoration: 'none' }}>
+                Create one here
+              </Link>
             </Typography>
           </TabPanel>
 

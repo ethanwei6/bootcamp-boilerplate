@@ -6,6 +6,7 @@ import theme from './ExampleTheme.ts'
 import { AuthProvider } from './context/AuthContext'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 import BrowsePets from './ProgrammerDashboard'
 import UserDashboard from './pages/UserDashboard'
 import AdminDashboard from './pages/AdminDashboard'
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/browse" element={<BrowsePets />} />
           <Route path="/dashboard" element={
             <ProtectedRoute>

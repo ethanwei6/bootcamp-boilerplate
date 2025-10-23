@@ -28,7 +28,12 @@ if (process.env.NODE_ENV == "production") {
     })
 }
 
-app.listen(PORT, () =>  {
-    connectToServer()
-    console.log(`Server is running on port ${PORT}`)
+app.listen(PORT, async () =>  {
+    console.log(`🚀 Server is starting on port ${PORT}`)
+    const dbConnected = await connectToServer()
+    if (dbConnected) {
+        console.log(`✅ Server is running on port ${PORT} with database connection`)
+    } else {
+        console.log(`⚠️ Server is running on port ${PORT} but database connection failed`)
+    }
 })

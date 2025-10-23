@@ -191,7 +191,7 @@ const LandingPage: React.FC = () => {
                 textTransform: 'none',
                 transition: 'all 0.3s ease'
               }}
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/register')}
             >
               🚀 Get Started
             </Button>
@@ -583,7 +583,7 @@ const LandingPage: React.FC = () => {
                 textTransform: 'none',
                 transition: 'all 0.3s ease'
               }}
-              onClick={() => navigate('/login', { state: { showRegister: true } })}
+              onClick={() => navigate('/register')}
             >
               🌟 Start Your Journey Today! 🌟
             </Button>

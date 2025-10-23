@@ -26,6 +26,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { getPets, createPet, updatePet, deletePet } from '../ExampleApi';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -81,43 +82,14 @@ const AdminDashboard: React.FC = () => {
       return;
     }
 
-    // Mock data - replace with actual API calls
-    const mockPets: Pet[] = [
-      {
-        _id: '1',
-        name: 'Buddy',
-        breed: 'Golden Retriever',
-        age: 3,
-        gender: 'Male',
-        price: 150,
-        description: 'A friendly and energetic dog who loves to play fetch.',
-        location: 'San Francisco, CA',
-        personality: ['Friendly', 'Energetic', 'Loyal'],
-        characteristics: ['Good with kids', 'House trained', 'Vaccinated'],
-        euthanized: false,
-        url: 'https://imageserver.petsbest.com/marketing/blog/toy-poodle.jpg'
-      },
-      {
-        _id: '2',
-        name: 'Luna',
-        breed: 'Domestic Shorthair',
-        age: 2,
-        gender: 'Female',
-        price: 100,
-        description: 'A playful kitten with striking blue eyes.',
-        location: 'Portland, OR',
-        personality: ['Playful', 'Curious', 'Affectionate'],
-        characteristics: ['Good with kids', 'Litter trained', 'Vaccinated'],
-        euthanized: false,
-        url: 'https://www.borrowmydoggy.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2F4ij0poqn%2Fproduction%2Fda89d930fc320dd912a2a25487b9ca86b37fcdd6-800x600.jpg&w=1080&q=80'
-      }
-    ];
-
+    loadPets();
+    
+    // Mock data for users and applications - replace with actual API calls when available
     const mockUsers: User[] = [
       {
         id: '1',
         userName: 'john_doe',
-        petsOwned: [mockPets[0]],
+        petsOwned: [],
         applications: []
       },
       {
@@ -131,7 +103,20 @@ const AdminDashboard: React.FC = () => {
     const mockApplications: Application[] = [
       {
         id: '1',
-        pet: mockPets[1],
+        pet: {
+          _id: '2',
+          name: 'Luna',
+          breed: 'Domestic Shorthair',
+          age: 2,
+          gender: 'Female',
+          price: 100,
+          description: 'A playful kitten with striking blue eyes.',
+          location: 'Portland, OR',
+          personality: ['Playful', 'Curious', 'Affectionate'],
+          characteristics: ['Good with kids', 'Litter trained', 'Vaccinated'],
+          euthanized: false,
+          url: 'https://www.borrowmydoggy.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2F4ij0poqn%2Fproduction%2Fda89d930fc320dd912a2a25487b9ca86b37fcdd6-800x600.jpg&w=1080&q=80'
+        },
         user: mockUsers[1],
         status: 'pending',
         submittedAt: '2024-01-15',
@@ -143,10 +128,35 @@ const AdminDashboard: React.FC = () => {
       }
     ];
 
-    setPets(mockPets);
     setUsers(mockUsers);
     setApplications(mockApplications);
   }, [isAdmin, navigate]);
+
+  const loadPets = async () => {
+    try {
+      const petsData = await getPets();
+      if (petsData) {
+        // Transform the API data to match our Pet interface
+        const transformedPets: Pet[] = petsData.map((pet: any) => ({
+          _id: pet._id,
+          name: pet.name,
+          breed: pet.breed,
+          age: pet.age,
+          gender: pet.gender || 'Unknown',
+          price: pet.price || 0,
+          description: pet.description || '',
+          location: pet.location || '',
+          personality: pet.personality || [],
+          characteristics: pet.characteristics || [],
+          euthanized: pet.euthanized || false,
+          url: pet.url
+        }));
+        setPets(transformedPets);
+      }
+    } catch (error) {
+      console.error('Failed to load pets:', error);
+    }
+  };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -166,32 +176,51 @@ const AdminDashboard: React.FC = () => {
 
   const handleDeletePet = async (petId: string) => {
     if (window.confirm('Are you sure you want to delete this pet?')) {
-      setPets(prev => prev.filter(pet => pet._id !== petId));
+      try {
+        await deletePet(petId);
+        // Reload pets to get the updated list
+        await loadPets();
+      } catch (error) {
+        console.error('Failed to delete pet:', error);
+        // You could add error handling here, like showing a snackbar
+      }
     }
   };
 
   const handleEuthanizePet = async (petId: string) => {
     if (window.confirm('Are you sure you want to mark this pet as euthanized?')) {
-      setPets(prev => prev.map(pet => 
-        pet._id === petId ? { ...pet, euthanized: true } : pet
-      ));
+      try {
+        await updatePet(petId, { euthanized: true });
+        setPets(prev => prev.map(pet => 
+          pet._id === petId ? { ...pet, euthanized: true } : pet
+        ));
+      } catch (error) {
+        console.error('Failed to euthanize pet:', error);
+      }
     }
   };
 
-  const handleSavePet = () => {
-    if (editingPet) {
-      setPets(prev => prev.map(pet => 
-        pet._id === editingPet._id ? { ...pet, ...petForm } : pet
-      ));
-    } else {
-      const newPet: Pet = {
-        _id: Date.now().toString(),
-        ...petForm as Pet,
-        euthanized: false
-      };
-      setPets(prev => [...prev, newPet]);
+  const handleSavePet = async () => {
+    try {
+      if (editingPet) {
+        // Update existing pet
+        await updatePet(editingPet._id, petForm);
+        setPets(prev => prev.map(pet => 
+          pet._id === editingPet._id ? { ...pet, ...petForm } : pet
+        ));
+      } else {
+        // Create new pet
+        const response = await createPet(petForm);
+        if (response.status === 200 || response.status === 201) {
+          // Reload pets to get the updated list with the new pet
+          await loadPets();
+        }
+      }
+      setPetDialogOpen(false);
+    } catch (error) {
+      console.error('Failed to save pet:', error);
+      // You could add error handling here, like showing a snackbar
     }
-    setPetDialogOpen(false);
   };
 
   const handleApplicationAction = async (applicationId: string, action: 'approve' | 'reject') => {
@@ -505,6 +534,30 @@ const AdminDashboard: React.FC = () => {
                 label="Image URL"
                 value={petForm.url || ''}
                 onChange={(e) => setPetForm({ ...petForm, url: e.target.value })}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Personality (comma-separated)"
+                value={petForm.personality ? petForm.personality.join(', ') : ''}
+                onChange={(e) => setPetForm({ 
+                  ...petForm, 
+                  personality: e.target.value.split(',').map(s => s.trim()).filter(s => s)
+                })}
+                placeholder="Friendly, Energetic, Loyal"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Characteristics (comma-separated)"
+                value={petForm.characteristics ? petForm.characteristics.join(', ') : ''}
+                onChange={(e) => setPetForm({ 
+                  ...petForm, 
+                  characteristics: e.target.value.split(',').map(s => s.trim()).filter(s => s)
+                })}
+                placeholder="Good with kids, House trained, Vaccinated"
               />
             </Grid>
           </Grid>
